@@ -1,0 +1,109 @@
+<div class="row d-flex">
+    <div class="col-md-8">
+        <div class="auto-height">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="form">
+                        <input type="text" [(ngModel)]="serachText" autofocus class="form-control form-input"
+                            placeholder="Search anything..." (keyup.enter)="onEnter()">
+                            
+                    </div>
+                    <div *ngIf="showError" class="text-center p-2"><span class="text-danger">No movies found!</span></div>
+                </div>
+            </div>
+            <div class="row" *ngIf="showResults">
+                <div class="col-lg-12 mt-3">
+                    <div class="custom-card">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <img [src]="serachResult.movieDetailsResponse.Poster" class="poster-image">
+                            </div>
+                            <div class="col-lg-7">
+                                <h3>{{serachResult.movieDetailsResponse.Title}} <span class="oscar-winner-badge"
+                                        *ngIf="serachResult.movieDetails.hasWonOscar">Oscar Winner</span></h3>
+                                <p>Released: {{serachResult.movieDetailsResponse.Released}}</p>
+                                <p>Director: {{serachResult.movieDetailsResponse.Director}}</p>
+                                <p>Actors: {{serachResult.movieDetailsResponse.Actors}}</p>
+                                <p>Language: {{serachResult.movieDetailsResponse.Language}}</p>
+                                <p>Awards: {{serachResult.movieDetailsResponse.Awards}}</p>
+                                <p>Plot: {{serachResult.movieDetailsResponse.Plot}}</p>
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <span class="fa fa-star" [ngClass]="rating >=1 ? 'checked' : ''"
+                                            (click)="rate(1, serachResult.movieDetails.movieId, serachResult.movieDetails.imdbId)"></span>
+                                        <span class="fa fa-star" [ngClass]="rating >=2 ? 'checked' : ''"
+                                            (click)="rate(2, serachResult.movieDetails.movieId, serachResult.movieDetails.imdbId)"></span>
+                                        <span class="fa fa-star" [ngClass]="rating >=3 ? 'checked' : ''"
+                                            (click)="rate(3, serachResult.movieDetails.movieId, serachResult.movieDetails.imdbId)"></span>
+                                        <span class="fa fa-star" [ngClass]="rating >=4 ? 'checked' : ''"
+                                            (click)="rate(4, serachResult.movieDetails.movieId, serachResult.movieDetails.imdbId)"></span>
+                                        <span class="fa fa-star" [ngClass]="rating >=5 ? 'checked' : ''"
+                                            (click)="rate(5, serachResult.movieDetails.movieId, serachResult.movieDetails.imdbId)"></span>
+                                        <span>(Avg: {{serachResult.movieDetails.averageRating | number :
+                                            '1.2-2'}})</span>
+                                    </div>
+                                    <div class="col-lg-3 text-right">
+                                        <button class="btn btn-sm btn-secondary" (click)="readMore = !readMore">
+                                            <span *ngIf="readMore">Read less</span>
+                                            <span *ngIf="!readMore">Read more</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2" *ngIf="readMore">
+                            <div class="col-lg-6">
+                                <p>Rated: {{serachResult.movieDetailsResponse.Rated}}</p>
+                                <p>Runtime: {{serachResult.movieDetailsResponse.Runtime}}</p>
+                                <p>Year: {{serachResult.movieDetailsResponse.Year}}</p>
+                                <p>Genre: {{serachResult.movieDetailsResponse.Genre}}</p>
+                                <p>Writer: {{serachResult.movieDetailsResponse.Writer}}</p>
+                                <p>Country: {{serachResult.movieDetailsResponse.Country}}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p>IMDB Rating: {{serachResult.movieDetailsResponse.imdbRating}}
+                                    ({{serachResult.movieDetailsResponse.imdbVotes}})</p>
+                                <p>DVD: {{serachResult.movieDetailsResponse.DVD}}</p>
+                                <p>BoxOffice: {{serachResult.movieDetailsResponse.BoxOffice}}</p>
+                                <p>Production: {{serachResult.movieDetailsResponse.Production}}</p>
+                                <p>Website:
+                                    <span *ngIf="serachResult.movieDetailsResponse.Website == 'N/A'">
+                                        {{serachResult.movieDetailsResponse.Website}}
+                                    </span>
+                                    <a *ngIf="serachResult.movieDetailsResponse.Website != 'N/A'" [href]="serachResult.movieDetailsResponse.Website" target="_blank">View more</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-4">
+        <div class="card p-3">
+            <div class="card-body">
+                <h5 class="card-title text-center text-muted">Top on trending</h5>
+            </div>
+            <div *ngFor="let item of trendingMovies" class="card text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img [src]="item.poster" class="tumbnail-image">
+                        </div>
+                        <div class="col-lg-8">
+                            <h5 class="card-title">{{item.movieName}} <span class="oscar-winner-badge"
+                                    *ngIf="item.hasWonOscar">Oscar Winner</span></h5>
+                            <div class="card-text">
+                                <p>Rating: {{item.averageRating | number : '1.2-2'}} ({{item.totalRatings}} responses)
+                                </p>
+                                <p>Theatre gross: ${{item.theatreGross}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
